@@ -1,3 +1,6 @@
+import org.apache.commons.math4.legacy.linear.MatrixUtils;
+
+@Deprecated
 public class VowelQualityVector {
     private double backness;
     private double openness;
