@@ -1,11 +1,9 @@
-import org.apache.commons.numbers.fraction.Fraction;
-
 public class Phone {
-    Fraction primary;
-    Fraction secondary;
-    Fraction tertiary;
+    FFE primary;
+    FFE secondary;
+    FFE tertiary;
 
-    public Phone(Fraction primary, Fraction secondary, Fraction tertiary) {
+    public Phone(FFE primary, FFE secondary, FFE tertiary) {
         this.primary = primary;
         this.secondary = secondary;
         this.tertiary = tertiary;
@@ -29,29 +27,29 @@ public class Phone {
         }
     }
 
-    public Fraction getPrimary() {
+    public FFE getPrimary() {
         return primary;
     }
 
-    public void setPrimary(Fraction primary) {
+    public void setPrimary(FFE primary) {
         this.primary = primary;
         verifyState();
     }
 
-    public Fraction getSecondary() {
+    public FFE getSecondary() {
         return secondary;
     }
 
-    public void setSecondary(Fraction secondary) {
+    public void setSecondary(FFE secondary) {
         this.secondary = secondary;
         verifyState();
     }
 
-    public Fraction getTertiary() {
+    public FFE getTertiary() {
         return tertiary;
     }
 
-    public void setTertiary(Fraction tertiary) {
+    public void setTertiary(FFE tertiary) {
         this.tertiary = tertiary;
         verifyState();
     }
