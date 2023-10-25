@@ -59,10 +59,6 @@ public class FFE implements FieldElement<FFE> {
         return fractionField;
     }
 
-    public int signum() {
-        return fraction.signum();
-    }
-
     private Fraction getFraction() {
         return fraction;
     }
