@@ -15,6 +15,10 @@ public class FFE implements FieldElement<FFE> {
     public static FFE of(int num, int den) {
         return new FFE(Fraction.of(num, den));
     }
+
+    public static FFE of(FFE ffe) {
+        return new FFE(ffe.getFraction());
+    }
     private FFE(Fraction fraction) {
         this.fraction = Fraction.of(fraction.getNumerator(), fraction.getDenominator());
     }
@@ -59,7 +63,16 @@ public class FFE implements FieldElement<FFE> {
         return fractionField;
     }
 
+    public int signum() {
+        return fraction.signum();
+    }
+
     private Fraction getFraction() {
         return fraction;
+    }
+
+    @Override
+    public String toString() {
+        return fraction.toString();
     }
 }

@@ -1,20 +1,27 @@
-public class Phone {
-    FFE primary;
-    FFE secondary;
-    FFE tertiary;
+import org.apache.commons.math4.legacy.linear.FieldMatrix;
+import org.apache.commons.math4.legacy.linear.FieldVector;
+import org.apache.commons.math4.legacy.linear.MatrixUtils;
 
-    public Phone(FFE primary, FFE secondary, FFE tertiary) {
-        this.primary = primary;
-        this.secondary = secondary;
-        this.tertiary = tertiary;
+public class Phone {
+    FieldVector<FFE> phoneVector;
+
+    public Phone(FFE primaryAxis, FFE secondaryAxis, FFE tertiaryAxis) {
+        phoneVector = MatrixUtils.createFieldVector(new FFE[]{FFE.of(primaryAxis), FFE.of(secondaryAxis), FFE.of(tertiaryAxis)});
         verifyState();
     }
 
     public boolean isConsonant() {
-        return primary.signum() == 1 && secondary.signum() == 1 && tertiary.signum() == 1;
+        FFE primaryAxis = phoneVector.getEntry(0);
+        FFE secondaryAxis = phoneVector.getEntry(1);
+        FFE tertiaryAxis = phoneVector.getEntry(2);
+        return primaryAxis.signum() == 1 && secondaryAxis.signum() == 1 && tertiaryAxis.signum() == 1;
     }
+
     public boolean isVowel() {
-        return primary.signum() == -1 && secondary.signum() == -1 && tertiary.signum() == -1;
+        FFE primaryAxis = phoneVector.getEntry(0);
+        FFE secondaryAxis = phoneVector.getEntry(1);
+        FFE tertiaryAxis = phoneVector.getEntry(2);
+        return primaryAxis.signum() == -1 && secondaryAxis.signum() == -1 && tertiaryAxis.signum() == -1;
     }
 
     public boolean hasIllegalState() {
@@ -27,30 +34,11 @@ public class Phone {
         }
     }
 
-    public FFE getPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(FFE primary) {
-        this.primary = primary;
-        verifyState();
-    }
-
-    public FFE getSecondary() {
-        return secondary;
-    }
-
-    public void setSecondary(FFE secondary) {
-        this.secondary = secondary;
-        verifyState();
-    }
-
-    public FFE getTertiary() {
-        return tertiary;
-    }
-
-    public void setTertiary(FFE tertiary) {
-        this.tertiary = tertiary;
-        verifyState();
+    @Override
+    public String toString() {
+        FFE primaryAxis = phoneVector.getEntry(0);
+        FFE secondaryAxis = phoneVector.getEntry(1);
+        FFE tertiaryAxis = phoneVector.getEntry(2);
+        return "P(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
     }
 }
