@@ -72,7 +72,6 @@ public class SoundLawMatrix {
     public static SoundLawMatrix generateSoundLawMatrixOf(Phone fromPhone, Phone toPhone) {
         SoundLawMatrix soundLawMatrix = getZeroMatrix();
         for (int i = 0; i < 3; i++) {
-
             soundLawMatrix.setEntry(i, i, toPhone.getEntryArray()[i].divide(fromPhone.getEntryArray()[i]));
         }
         return soundLawMatrix;
