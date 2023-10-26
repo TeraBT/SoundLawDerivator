@@ -1,3 +1,5 @@
+package SoundSystem;
+
 public class Vowel extends Phone {
     public Vowel(FFE primary, FFE secondary, FFE tertiary) {
         super(primary, secondary, tertiary);

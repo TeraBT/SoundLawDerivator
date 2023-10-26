@@ -1,8 +1,10 @@
+package SoundSystem;
+
 import org.apache.commons.math4.legacy.linear.FieldVector;
 import org.apache.commons.math4.legacy.linear.MatrixUtils;
 
 public class Phone {
-    FieldVector<FFE> phoneVector;
+    protected FieldVector<FFE> phoneVector;
 
     public Phone(FFE primaryAxis, FFE secondaryAxis, FFE tertiaryAxis) {
         phoneVector = MatrixUtils.createFieldVector(new FFE[] {primaryAxis, (secondaryAxis), (tertiaryAxis)});
@@ -20,18 +22,23 @@ public class Phone {
         verifyState();
     }
 
+    public Phone(Phone phone) {
+        phoneVector = MatrixUtils.createFieldVector(phone.getEntryArray());
+        verifyState();
+    }
+
     public boolean isConsonant() {
         FFE primaryAxis = phoneVector.getEntry(0);
         FFE secondaryAxis = phoneVector.getEntry(1);
         FFE tertiaryAxis = phoneVector.getEntry(2);
-        return primaryAxis.signum() == 1 && secondaryAxis.signum() == 1 && tertiaryAxis.signum() == 1;
+        return primaryAxis.signum() != -1 && secondaryAxis.signum() != -1 && tertiaryAxis.signum() != 1;
     }
 
     public boolean isVowel() {
         FFE primaryAxis = phoneVector.getEntry(0);
         FFE secondaryAxis = phoneVector.getEntry(1);
         FFE tertiaryAxis = phoneVector.getEntry(2);
-        return primaryAxis.signum() == -1 && secondaryAxis.signum() == -1 && tertiaryAxis.signum() == -1;
+        return primaryAxis.signum() != 1 && secondaryAxis.signum() != 1 && tertiaryAxis.signum() != 1;
     }
 
     public boolean hasIllegalState() {
