@@ -10,7 +10,6 @@ import org.apache.commons.numbers.fraction.Fraction;
  */
 public class FFE implements FieldElement<FFE> {
     private final Fraction fraction;
-    private final Field<FFE> fractionField = new FractionField();
 
     public static FFE of(int num, int den) {
         return new FFE(Fraction.of(num, den));
@@ -60,7 +59,7 @@ public class FFE implements FieldElement<FFE> {
 
     @Override
     public Field<FFE> getField() {
-        return fractionField;
+        return new FFEField();
     }
 
     public int signum() {
@@ -68,11 +67,22 @@ public class FFE implements FieldElement<FFE> {
     }
 
     private Fraction getFraction() {
-        return fraction;
+        return Fraction.of(fraction.getNumerator(), fraction.getDenominator());
     }
 
     @Override
     public String toString() {
         return fraction.toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other instanceof FFE) {
+            return fraction.equals(((FFE) other).fraction);
+        }
+        return false;
     }
 }
