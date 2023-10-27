@@ -1,13 +1,13 @@
-package SoundSystem;
+package soundsystem;
 
-public class Vowel extends Phone {
-    public Vowel(FFE primary, FFE secondary, FFE tertiary) {
+public class Consonant extends Phone {
+    public Consonant(FFE primary, FFE secondary, FFE tertiary) {
         super(primary, secondary, tertiary);
     }
 
     @Override
     public boolean hasIllegalState() {
-        return !isVowel();
+        return !isConsonant();
     }
 
     @Override
@@ -15,6 +15,6 @@ public class Vowel extends Phone {
         FFE primaryAxis = phoneVector.getEntry(0);
         FFE secondaryAxis = phoneVector.getEntry(1);
         FFE tertiaryAxis = phoneVector.getEntry(2);
-        return "V(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
+        return "C(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
     }
 }

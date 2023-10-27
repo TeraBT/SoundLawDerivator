@@ -1,4 +1,4 @@
-package SoundSystem;
+package soundsystem;
 
 import org.apache.commons.math4.legacy.linear.FieldMatrix;
 import org.apache.commons.math4.legacy.linear.MatrixUtils;
@@ -78,6 +78,8 @@ public class SoundLawMatrix {
         }
         return soundLawMatrix;
     }
+
+    //TODO: getInverseSoundLawMatrix
 
     public Phone applySoundLaw(Phone phone) {
         return new Phone(soundLawMatrix.multiply(MatrixUtils.createColumnFieldMatrix(

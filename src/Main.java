@@ -1,10 +1,11 @@
-import Parsing.LatinSymbolMapper;
-import Parsing.PhoneParser;
-import Parsing.XMLParser;
-import SoundSystem.Phone;
+import auxiliary.StringPreprocessor;
+import auxiliary.XMLParser;
+import mapping.IPA;
+import mapping.LatinOrthography;
+import mapping.SigmaMapper;
+import org.apache.commons.math4.legacy.optim.nonlinear.scalar.Sigma;
 
 import java.io.IOException;
-import java.util.List;
 
 
 public class Main {
@@ -36,9 +37,19 @@ public class Main {
 //
 //        }
 
-//        System.out.println(XMLParser.parse("corpora/Julius-Caesar_De-bello-Gallico.xml").substring(0, 1000));
-        List<Phone> phoneSequence = new PhoneParser(new LatinSymbolMapper()).parse("Gallia");
-        System.out.println(phoneSequence);
-        //TODO: [null, P(-2 / 3, 0, 0), null, null, null, P(-2 / 3, 0, 0), P(-1, -1, 0), null, null] correct mappings, but wrong order and position!
+//        String test = "InTabernaQuando";
+//        System.out.println(test.indexOf("Taberna", 3));
+        String text = XMLParser.parse("corpora/Julius-Caesar_De-bello-Gallico.xml").substring(0, 1000);
+//        List<Phone> phoneSequence = new SymbolParser(new LatinSymbolMapper()).parse("Gallia");
+//        System.out.println(phoneSequence);
+//        System.out.println(new StringBuilder("TEST").replace(1, 2, "L"));
+//        String text = "Gaquaqllia";
+//        String text2 = "qu";
+        String sequence = StringPreprocessor.clean(text);
+        LatinOrthography latinOrthography = new LatinOrthography();
+        IPA ipa = new IPA();
+        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
+        System.out.println(sigmaMapper.mapToSymbolSequence(sequence));
+        System.out.println(sigmaMapper.mapDirectlyToPhoneSequence(sequence));
     }
 }

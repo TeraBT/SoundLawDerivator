@@ -1,4 +1,4 @@
-package SoundSystem;
+package soundsystem;
 
 import org.apache.commons.math4.legacy.linear.FieldVector;
 import org.apache.commons.math4.legacy.linear.MatrixUtils;

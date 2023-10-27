@@ -1,4 +1,4 @@
-package SoundSystem;
+package soundsystem;
 
 import org.apache.commons.math4.legacy.core.Field;
 import org.apache.commons.math4.legacy.core.FieldElement;

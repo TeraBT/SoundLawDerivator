@@ -1,6 +1,4 @@
-package SoundSystem;
-
-import org.apache.commons.math4.legacy.linear.MatrixUtils;
+package soundsystem;
 
 @Deprecated
 public class VowelQualityVector {
