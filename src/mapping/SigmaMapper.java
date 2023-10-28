@@ -2,10 +2,7 @@ package mapping;
 
 import soundsystem.Phone;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,13 +15,13 @@ public class SigmaMapper {
         this.phoneticAlphabet = phoneticAlphabet;
     }
 
-    public List<IPASymbol> mapToSymbolSequence(String sequence) {
-        StringBuilder editingSequence = new StringBuilder(sequence);
+    public List<IPASymbol> mapToSymbolSequence(String representativeSequence) {
+        StringBuilder editingSequence = new StringBuilder(representativeSequence);
         Set<String> representativeSet = orthography.getRepresentativeSet();
         List<String> biggestToSmallesRepresentativeList = representativeSet.stream().
                 sorted(Comparator.comparing(String::length, Comparator.reverseOrder())).toList();
         List<IPASymbol> symbolSequence = new ArrayList<>();
-        for (int i = 0; i < sequence.length(); i++) {
+        for (int i = 0; i < representativeSequence.length(); i++) {
             symbolSequence.add(IPASymbol.UNKNOWN_SYMBOL);
         }
 
@@ -53,11 +50,7 @@ public class SigmaMapper {
         for (IPASymbol symbol : symbolSequence) {
             if (symbol != IPASymbol.EMPTY_SYMBOL) {
                 Phone correspondingPhone = phoneticAlphabet.mapToPhone(symbol);
-                if (correspondingPhone != null) {
-                    phoneSequence.add(phoneticAlphabet.mapToPhone(symbol));
-                } else {
-                    phoneSequence.add(IPA.UNDEFINED_PHONE);
-                }
+                phoneSequence.add(Objects.requireNonNullElse(correspondingPhone, IPA.UNDEFINED_PHONE));
             }
         }
         return phoneSequence;
@@ -67,5 +60,36 @@ public class SigmaMapper {
         return mapToPhoneSequence(mapToSymbolSequence(sequence));
     }
 
-    //TODO: reverse functions
+    public List<IPASymbol> mapBackToSymbolSequence(List<Phone> phoneSequence) {
+        List<IPASymbol> symbolSequence = new ArrayList<>();
+        for (Phone phone : phoneSequence) {
+            IPASymbol correspondingSymbol = phoneticAlphabet.mapToSymbol(phone);
+            symbolSequence.add(Objects.requireNonNullElse(correspondingSymbol, IPASymbol.UNDEFINED_SYMBOL));
+        }
+        return symbolSequence;
+    }
+
+    //TODO representative to symbol is not injective and s to r is right-unique !!!change behavior
+
+    //TODO ALSO: Latin rep. "iu" needs to be mapped to "j, u", not "i, u" cet. Maybe tuple of symbols or automatic
+    //TODO: remapping of i if it is followed by u
+    //TODO:
+    public String mapBackToRepresentativeSequence(List<IPASymbol> symbolSequence) {
+        StringBuilder representativeSequence = new StringBuilder();
+        for (IPASymbol symbol : symbolSequence) {
+            String correspondingRepresentative = orthography.mapToRepresentative(symbol);
+            if (symbol.equals(IPASymbol.UNKNOWN_SYMBOL)) {
+                representativeSequence.append('#');
+            } else if (correspondingRepresentative == null) {
+                representativeSequence.append('*');
+            } else {
+                representativeSequence.append(correspondingRepresentative);
+            }
+        }
+        return representativeSequence.toString();
+    }
+
+    public String mapBackDirectlyToRepresentativeSequence(List<Phone> phoneSequence) {
+        return mapBackToRepresentativeSequence(mapBackToSymbolSequence(phoneSequence));
+    }
 }

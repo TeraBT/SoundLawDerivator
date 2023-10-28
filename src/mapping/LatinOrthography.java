@@ -24,8 +24,8 @@ public class LatinOrthography implements Orthography {
     }
 
     @Override
-    public IPASymbol mapToSymbol(String sequence) {
-        return representativeToSymbolMap.get(sequence);
+    public IPASymbol mapToSymbol(String representative) {
+        return representativeToSymbolMap.get(representative);
     }
 
     @Override

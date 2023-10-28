@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class IPA implements PhoneticAlphabet {
-    public static final Phone EMPTY_PHONE = new PlaceholderPhone(IPASymbol.EMPTY_SYMBOL);
+//    public static final Phone EMPTY_PHONE = new PlaceholderPhone(IPASymbol.EMPTY_SYMBOL);
     public static final Phone UNKNOWN_PHONE = new PlaceholderPhone(IPASymbol.UNKNOWN_SYMBOL);
     public static final Phone UNDEFINED_PHONE = new PlaceholderPhone("UNDEFINED_PHONE");
     public static final Phone A = new Phone(-2, 3, 0, 1, 0, 1);
@@ -24,7 +24,7 @@ public class IPA implements PhoneticAlphabet {
     //TODO: consonants and other vowels; then subdivide in consonant classes cet.
 
     public IPA() {
-        symbolToPhoneMap.put(IPASymbol.EMPTY_SYMBOL, EMPTY_PHONE);
+//        symbolToPhoneMap.put(IPASymbol.EMPTY_SYMBOL, EMPTY_PHONE);
         symbolToPhoneMap.put(IPASymbol.UNKNOWN_SYMBOL, UNKNOWN_PHONE);
         symbolToPhoneMap.put(IPASymbol.A, A);
         symbolToPhoneMap.put(IPASymbol.E, E);

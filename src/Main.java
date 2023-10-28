@@ -3,9 +3,11 @@ import auxiliary.XMLParser;
 import mapping.IPA;
 import mapping.LatinOrthography;
 import mapping.SigmaMapper;
-import org.apache.commons.math4.legacy.optim.nonlinear.scalar.Sigma;
+import soundsystem.Phone;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Main {
@@ -39,17 +41,38 @@ public class Main {
 
 //        String test = "InTabernaQuando";
 //        System.out.println(test.indexOf("Taberna", 3));
-        String text = XMLParser.parse("corpora/Julius-Caesar_De-bello-Gallico.xml").substring(0, 1000);
+        String text = XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml").substring(0, 101);
 //        List<Phone> phoneSequence = new SymbolParser(new LatinSymbolMapper()).parse("Gallia");
 //        System.out.println(phoneSequence);
 //        System.out.println(new StringBuilder("TEST").replace(1, 2, "L"));
 //        String text = "Gaquaqllia";
 //        String text2 = "qu";
-        String sequence = StringPreprocessor.clean(text);
-        LatinOrthography latinOrthography = new LatinOrthography();
-        IPA ipa = new IPA();
-        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
-        System.out.println(sigmaMapper.mapToSymbolSequence(sequence));
-        System.out.println(sigmaMapper.mapDirectlyToPhoneSequence(sequence));
+//        String representativeSequence = StringPreprocessor.clean("terques");
+//        System.out.println(representativeSequence);
+//        LatinOrthography latinOrthography = new LatinOrthography();
+//        IPA ipa = new IPA();
+//        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
+////        System.out.println(sigmaMapper.mapToSymbolSequence(representativeSequence));
+//        List<Phone> phoneSequence = sigmaMapper.mapDirectlyToPhoneSequence(representativeSequence);
+//        System.out.println(phoneSequence);
+//        String mappedBack = sigmaMapper.mapBackDirectlyToRepresentativeSequence(phoneSequence);
+//        System.out.println(mappedBack);
+//        if (mappedBack.equals(representativeSequence)) {
+//            System.out.println(ANSI_GREEN
+//                    + "EQUAL"
+//                    + ANSI_RESET);
+//        } else {
+//            System.out.println(ANSI_RED
+//                    + "UNEQUAL"
+//                    + ANSI_RESET);
+//        }
+//        String[] arr= StringPreprocessor.tokenize("    gärhô    \r \r\n \n\r loss \n dsf   ");
+//        System.out.println(Arrays.toString(StringPreprocessor.tokenize(text)));
+//        int[][] array = new int[3][3];
+//        for (int i = 0; i < array.length; i++) {
+//            for (int j = 0; j < array[0].length; j++) {
+//                System.out.println(array[i][j]);
+//            }
+//        }
     }
 }
