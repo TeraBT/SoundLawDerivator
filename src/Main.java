@@ -1,11 +1,12 @@
-import auxiliary.StringPreprocessor;
-import auxiliary.XMLParser;
+import auxiliary.*;
 import mapping.IPA;
+import mapping.IPASymbol;
 import mapping.LatinOrthography;
 import mapping.SigmaMapper;
-import soundsystem.Phone;
+import org.apache.commons.math4.legacy.core.Pair;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,9 +50,9 @@ public class Main {
 //        String text2 = "qu";
 //        String representativeSequence = StringPreprocessor.clean("terques");
 //        System.out.println(representativeSequence);
-//        LatinOrthography latinOrthography = new LatinOrthography();
-//        IPA ipa = new IPA();
-//        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
+        LatinOrthography latinOrthography = new LatinOrthography();
+        IPA ipa = new IPA();
+        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
 ////        System.out.println(sigmaMapper.mapToSymbolSequence(representativeSequence));
 //        List<Phone> phoneSequence = sigmaMapper.mapDirectlyToPhoneSequence(representativeSequence);
 //        System.out.println(phoneSequence);
@@ -74,5 +75,24 @@ public class Main {
 //                System.out.println(array[i][j]);
 //            }
 //        }
+
+//        System.out.println(LevenshteinDistance.calculateSimilarityScore("asdfgjl", "dsa"));
+//        String s1 = "aeiou";//"AGACTAGTTAC";
+//        String s2 =  "aiu";//"CGAGACGT";
+//        var seqs = NeedlemanWunschAlgorithm.computeOptimalSequences(sigmaMapper.mapToSymbolSequence(s1), sigmaMapper.mapToSymbolSequence(s2));
+////        System.out.println(s1 + '\n' + seqs[0]);
+////        System.out.println("-------------");
+////        System.out.println(s2 + '\n' + seqs[1]);
+//        System.out.println(seqs.get(0) + "\n" + seqs.get(1));
+//        System.out.println(TextReader.read("corpora/test.txt"));
+        List<String> italianoTokens = StringPreprocessor.tokenize(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"));
+        List<String> latinTokens = StringPreprocessor.tokenize(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"));
+
+//        System.out.println(latinTokens.length + "\n" + italianoTokens.length);
+
+        List<Pair<String, String>> mostSimilarMatches = SequenceComparator.findMostSimilarMatches(latinTokens.subList(0, 10000), italianoTokens.subList(0, 10000));
+        for (int i = 0; i < mostSimilarMatches.size(); i++) {
+            System.out.print(mostSimilarMatches.get(i) + "\n");
+        }
     }
 }
