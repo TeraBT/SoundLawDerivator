@@ -7,22 +7,34 @@ import java.util.List;
 
 public class SequenceComparator {
 
-    public static List<Pair<String, String>> findMostSimilarMatches(List<String> olderTokens, List<String> youngerTokens) {
-        List<Pair<String, String>> matchList = new ArrayList<>();
-        for (String olderToken : olderTokens) {
-            String bestMatch = null;
-            double matchDistance = 0;
-            double priorMatchDistance = 0;
-            for (String youngerToken : youngerTokens) {
-                matchDistance = LevenshteinDistance.calculateSimilarityScore(olderToken, youngerToken);
-                if (matchDistance > priorMatchDistance) {
-                    priorMatchDistance = matchDistance;
-                    bestMatch = youngerToken;
-                }
-            }
-            matchList.add(new Pair<>(olderToken, bestMatch));
+    public static List<Pair<String, String>> findBestMatches(List<String> tokenListOlder, List<String> tokenListYounger) {
+        List<Pair<String, String>> bestMatchList = new ArrayList<>();
+        for (String tokenOlder : tokenListOlder) {
+            String bestCounterpart = compareOneToN(tokenOlder, tokenListYounger);
+            bestMatchList.add(new Pair<>(tokenOlder, bestCounterpart));
         }
-        return matchList;
+        return bestMatchList;
+    }
+
+    public static Pair<String, String> findBestMatchConcurrently(String tokenOlder, List<String> tokenListYounger) {
+        String bestCounterpart = compareOneToN(tokenOlder, tokenListYounger);
+        return new Pair<>(tokenOlder, bestCounterpart);
+    }
+
+    private static String compareOneToN(String tokenOlder, List<String> tokenListYounger) {
+        String bestCounterpart = null;
+        double matchDistance;
+        double priorMatchDistance = 0;
+
+        for (String currentTokenYounger : tokenListYounger) {
+
+            matchDistance = LevenshteinDistance.calculateSimilarityScore(tokenOlder, currentTokenYounger);
+            if (matchDistance > priorMatchDistance) {
+                priorMatchDistance = matchDistance;
+                bestCounterpart = currentTokenYounger;
+            }
+        }
+        return bestCounterpart;
     }
 
     //TODO: same method but for IPASymbols!

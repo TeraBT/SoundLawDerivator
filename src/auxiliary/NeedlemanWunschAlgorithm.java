@@ -1,6 +1,7 @@
 package auxiliary;
 
 import mapping.IPASymbol;
+import org.apache.commons.math4.legacy.core.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +68,7 @@ public class NeedlemanWunschAlgorithm {
         return alignmentMatrix;
     }
 
-    public static List<String> computeOptimalSequences(int[][] alignmentMatrix, String sequence1, String sequence2) {
+    private static Pair<String, String> computeOptimalAlignment(int[][] alignmentMatrix, String sequence1, String sequence2) {
         StringBuilder alignmentSequence1 = new StringBuilder();
         StringBuilder alignmentSequence2 = new StringBuilder();
         int i = sequence1.length();
@@ -91,10 +92,10 @@ public class NeedlemanWunschAlgorithm {
             }
         }
 
-        return List.of(alignmentSequence1.toString(), alignmentSequence2.toString());
+        return Pair.create(alignmentSequence1.toString(), alignmentSequence2.toString());
     }
 
-    public static List<List<IPASymbol>> computeOptimalSequences(int[][] alignmentMatrix, List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
+    private static Pair<List<IPASymbol>, List<IPASymbol>> computeOptimalAlignment(int[][] alignmentMatrix, List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
         List<IPASymbol> alignmentSequence1 = new ArrayList<>();
         List<IPASymbol> alignmentSequence2 = new ArrayList<>();
         int i = sequence1.size();
@@ -118,14 +119,14 @@ public class NeedlemanWunschAlgorithm {
             }
         }
 
-        return List.of(alignmentSequence1, alignmentSequence2);
+        return Pair.create(alignmentSequence1, alignmentSequence2);
     }
 
-    public static List<String> computeOptimalSequences(String sequence1, String sequence2) {
-        return computeOptimalSequences(computeAlignmentMatrix(sequence1, sequence2), sequence1, sequence2);
+    public static Pair<String, String> computeOptimalAlignment(String sequence1, String sequence2) {
+        return computeOptimalAlignment(computeAlignmentMatrix(sequence1, sequence2), sequence1, sequence2);
     }
 
-    public static List<List<IPASymbol>> computeOptimalSequences(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
-        return computeOptimalSequences(computeAlignmentMatrix(sequence1, sequence2), sequence1, sequence2);
+    public static Pair<List<IPASymbol>, List<IPASymbol>> computeOptimalAlignment(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
+        return computeOptimalAlignment(computeAlignmentMatrix(sequence1, sequence2), sequence1, sequence2);
     }
 }
