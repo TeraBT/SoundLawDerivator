@@ -21,14 +21,7 @@ public class NeedlemanWunschAlgorithm {
     private static int[][] computeAlignmentMatrix(String sequence1, String sequence2) {
         int n = sequence1.length();
         int m = sequence2.length();
-        int[][] alignmentMatrix = new int[n + 1][m + 1];
-
-        for (int i = 1; i <= n; i++) {
-            alignmentMatrix[i][0] = gapPenalty * i;
-        }
-        for (int j = 1; j <= m; j++) {
-            alignmentMatrix[0][j] = gapPenalty * j;
-        }
+        int[][] alignmentMatrix = initializeMatrix(n, m);
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
@@ -46,14 +39,7 @@ public class NeedlemanWunschAlgorithm {
     private static int[][] computeAlignmentMatrix(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
         int n = sequence1.size();
         int m = sequence2.size();
-        int[][] alignmentMatrix = new int[n + 1][m + 1];
-
-        for (int i = 1; i <= n; i++) {
-            alignmentMatrix[i][0] = gapPenalty * i;
-        }
-        for (int j = 1; j <= m; j++) {
-            alignmentMatrix[0][j] = gapPenalty * j;
-        }
+        int[][] alignmentMatrix = initializeMatrix(n, m);
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
@@ -65,6 +51,18 @@ public class NeedlemanWunschAlgorithm {
             }
         }
 
+        return alignmentMatrix;
+    }
+
+    private static int[][] initializeMatrix(int n, int m) {
+        int[][] alignmentMatrix = new int[n + 1][m + 1];
+
+        for (int i = 1; i <= n; i++) {
+            alignmentMatrix[i][0] = gapPenalty * i;
+        }
+        for (int j = 1; j <= m; j++) {
+            alignmentMatrix[0][j] = gapPenalty * j;
+        }
         return alignmentMatrix;
     }
 

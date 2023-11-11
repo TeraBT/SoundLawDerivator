@@ -4,8 +4,6 @@ import soundsystem.Phone;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.toList;
-
 public class SigmaMapper {
     private final Orthography orthography;
     private final PhoneticAlphabet phoneticAlphabet;
@@ -15,14 +13,14 @@ public class SigmaMapper {
         this.phoneticAlphabet = phoneticAlphabet;
     }
 
-    public List<IPASymbol> mapToSymbolSequence(String representativeSequence) {
+    public List<List<IPASymbol>> mapToSymbolSequenceList(String representativeSequence) {
         StringBuilder editingSequence = new StringBuilder(representativeSequence);
         Set<String> representativeSet = orthography.getRepresentativeSet();
         List<String> biggestToSmallesRepresentativeList = representativeSet.stream().
                 sorted(Comparator.comparing(String::length, Comparator.reverseOrder())).toList();
-        List<IPASymbol> symbolSequence = new ArrayList<>();
+        List<List<IPASymbol>> symbolSequenceList = new ArrayList<>();
         for (int i = 0; i < representativeSequence.length(); i++) {
-            symbolSequence.add(IPASymbol.UNKNOWN_SYMBOL);
+            symbolSequenceList.add(List.of(IPASymbol.UNKNOWN_SYMBOL));
         }
 
         for (String representative : biggestToSmallesRepresentativeList) {
@@ -30,10 +28,10 @@ public class SigmaMapper {
             while (true) {
                 currentSequencePosition = editingSequence.indexOf(representative, currentSequencePosition);
                 if (currentSequencePosition != -1) {
-                    symbolSequence.set(currentSequencePosition, orthography.mapToSymbol(representative));
+                    symbolSequenceList.set(currentSequencePosition, orthography.mapToSymbolList(representative));
                     editingSequence.replace(currentSequencePosition, currentSequencePosition + 1, "#");
                     for (int i = currentSequencePosition + 1; i < currentSequencePosition + representative.length(); i++) {
-                        symbolSequence.set(i, IPASymbol.EMPTY_SYMBOL);
+                        symbolSequenceList.set(i, List.of(IPASymbol.EMPTY_SYMBOL));
                         editingSequence.replace(i, i + 1, "#");
                     }
                     currentSequencePosition = currentSequencePosition + representative.length();
@@ -42,31 +40,38 @@ public class SigmaMapper {
                 }
             }
         }
-        return symbolSequence;
+        return symbolSequenceList;
     }
 
-    public List<Phone> mapToPhoneSequence(List<IPASymbol> symbolSequence) {
+    public List<IPASymbol> mapToFlatSymbolSequence(String representativeSequence) {
+        return mapToSymbolSequenceList(representativeSequence).stream().flatMap(Collection::stream).toList();
+    }
+
+    public List<Phone> mapToPhoneSequence(List<List<IPASymbol>> symbolListSequence) {
         List<Phone> phoneSequence = new ArrayList<>();
-        for (IPASymbol symbol : symbolSequence) {
-            if (symbol != IPASymbol.EMPTY_SYMBOL) {
-                Phone correspondingPhone = phoneticAlphabet.mapToPhone(symbol);
-                phoneSequence.add(Objects.requireNonNullElse(correspondingPhone, IPA.UNDEFINED_PHONE));
+        for (List<IPASymbol> symbolList : symbolListSequence) {
+            for (IPASymbol symbol : symbolList) {
+                if (symbol != IPASymbol.EMPTY_SYMBOL) {
+                    Phone correspondingPhone = phoneticAlphabet.mapToPhone(symbol);
+                    phoneSequence.add(Objects.requireNonNullElse(correspondingPhone, IPA.UNDEFINED_PHONE));
+                }
             }
         }
         return phoneSequence;
     }
 
     public List<Phone> mapDirectlyToPhoneSequence(String sequence) {
-        return mapToPhoneSequence(mapToSymbolSequence(sequence));
+        return mapToPhoneSequence(mapToSymbolSequenceList(sequence));
     }
 
-    public List<IPASymbol> mapBackToSymbolSequence(List<Phone> phoneSequence) {
-        List<IPASymbol> symbolSequence = new ArrayList<>();
-        for (Phone phone : phoneSequence) {
-            IPASymbol correspondingSymbol = phoneticAlphabet.mapToSymbol(phone);
-            symbolSequence.add(Objects.requireNonNullElse(correspondingSymbol, IPASymbol.UNDEFINED_SYMBOL));
-        }
-        return symbolSequence;
+    public List<IPASymbol> mapBackToSymbolListSequence(List<Phone> phoneSequence) { //TODO: fit for new list of lists imp.
+//        List<IPASymbol> symbolSequence = new ArrayList<>();
+//        for (Phone phone : phoneSequence) {
+//            IPASymbol correspondingSymbol = phoneticAlphabet.mapToSymbol(phone);
+//            symbolSequence.add(Objects.requireNonNullElse(correspondingSymbol, IPASymbol.UNDEFINED_SYMBOL));
+//        }
+//        return symbolSequence;
+        return null;
     }
 
     //TODO representative to symbol is not injective and s to r is right-unique !!!change behavior
@@ -74,22 +79,22 @@ public class SigmaMapper {
     //TODO ALSO: Latin rep. "iu" needs to be mapped to "j, u", not "i, u" cet. Maybe tuple of symbols or automatic
     //TODO: remapping of i if it is followed by u
     //TODO:
-    public String mapBackToRepresentativeSequence(List<IPASymbol> symbolSequence) {
-        StringBuilder representativeSequence = new StringBuilder();
-        for (IPASymbol symbol : symbolSequence) {
-            String correspondingRepresentative = orthography.mapToRepresentative(symbol);
-            if (symbol.equals(IPASymbol.UNKNOWN_SYMBOL)) {
-                representativeSequence.append('#');
-            } else if (correspondingRepresentative == null) {
-                representativeSequence.append('*');
-            } else {
-                representativeSequence.append(correspondingRepresentative);
-            }
-        }
-        return representativeSequence.toString();
-    }
-
-    public String mapBackDirectlyToRepresentativeSequence(List<Phone> phoneSequence) {
-        return mapBackToRepresentativeSequence(mapBackToSymbolSequence(phoneSequence));
-    }
+//    public String mapBackToRepresentativeSequence(List<IPASymbol> symbolSequence) { //TODO: change for new list of lists imp.
+//        StringBuilder representativeSequence = new StringBuilder();
+//        for (IPASymbol symbol : symbolSequence) {
+//            String correspondingRepresentative = orthography.mapToRepresentative(symbol);
+//            if (symbol.equals(IPASymbol.UNKNOWN_SYMBOL)) {
+//                representativeSequence.append('#');
+//            } else if (correspondingRepresentative == null) {
+//                representativeSequence.append('*');
+//            } else {
+//                representativeSequence.append(correspondingRepresentative);
+//            }
+//        }
+//        return representativeSequence.toString();
+//    }
+//
+//    public String mapBackDirectlyToRepresentativeSequence(List<Phone> phoneSequence) {
+//        return mapBackToRepresentativeSequence(mapBackToSymbolSequence(phoneSequence));
+//    }
 }

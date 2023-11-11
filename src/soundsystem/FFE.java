@@ -10,7 +10,8 @@ import org.apache.commons.numbers.fraction.Fraction;
 /**
  * SoundSystem.FFE stands for FractionFieldElement
  */
-public class FFE implements FieldElement<FFE> {
+public class
+FFE implements FieldElement<FFE> {
     private final Fraction fraction;
 
     public static FFE of(int num, int den) {

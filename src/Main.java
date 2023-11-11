@@ -1,4 +1,6 @@
 import auxiliary.*;
+import auxiliary.parallelization.RepresentativeWorkerOrganizer;
+import auxiliary.parallelization.SymbolWorkerOrganizer;
 import mapping.IPA;
 import mapping.IPASymbol;
 import mapping.LatinOrthography;
@@ -6,8 +8,6 @@ import mapping.SigmaMapper;
 import org.apache.commons.math4.legacy.core.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -86,9 +86,10 @@ public class Main {
 ////        System.out.println(s2 + '\n' + seqs[1]);
 //        System.out.println(seqs.get(0) + "\n" + seqs.get(1));
 //        System.out.println(TextReader.read("corpora/test.txt"));
-        List<String> latinTokens = StringPreprocessor.tokenize(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"));
-        List<String> italianoTokens = StringPreprocessor.tokenize(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"));
-
+        List<String> latinTokens = StringPreprocessor.tokenizeDistinct(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"));
+        List<String> italianoTokens = StringPreprocessor.tokenizeDistinct(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"));
+        List<List<IPASymbol>> latinSymbolTokens = StringPreprocessor.tokenizeDistinctToIPASymbolSequence(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"), sigmaMapper);
+        List<List<IPASymbol>> italianoSymbolTokens = StringPreprocessor.tokenizeDistinctToIPASymbolSequence(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"), sigmaMapper);
 //        System.out.println(latinTokens.length + "\n" + italianoTokens.length);
 
 //        List<Pair<String, String>> mostSimilarMatches = SequenceComparator.findMostSimilarMatches(latinTokens.subList(0, 10000), italianoTokens.subList(0, 10000));
@@ -104,15 +105,24 @@ public class Main {
 //        System.out.println(aligns.toString());
 
         //levenshtein
-        List<String> latinSmall = latinTokens.subList(0, 100);
-        List<String> italianoSmall = italianoTokens.subList(0, 100);
-        WorkerOrganizer wo1 = new WorkerOrganizer(latinTokens, italianoTokens, 16, 16);
-        List<Pair<String, String>> bestMatchesConcurrent = wo1.executeLevenshteinWorkers();
+//        List<String> latinSmall = latinTokens.subList(0, 100);
+//        List<String> italianoSmall = italianoTokens.subList(0, 100);
+        RepresentativeWorkerOrganizer woRepresentatives = new RepresentativeWorkerOrganizer(latinTokens, italianoTokens, 16, 16);
+        SymbolWorkerOrganizer woSymbols = new SymbolWorkerOrganizer(latinSymbolTokens, italianoSymbolTokens, 16, 16);
+        List<Pair<String, String>> bestMatchesConcurrent = woRepresentatives.executeLevenshteinWorkers();
         System.out.println(bestMatchesConcurrent.size());
-//        bestMatchesConcurrent = bestMatchesConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
-//        for (Pair<String, String> bestMatch : bestMatchesConcurrent) {
+        bestMatchesConcurrent = bestMatchesConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
+        for (Pair<String, String> bestMatch : bestMatchesConcurrent) {
+            System.out.println(bestMatch);
+        }
+
+//        List<Pair<List<IPASymbol>, List<IPASymbol>>> bestMatchesConcurrentSymbol = woSymbols.executeLevenshteinWorkers();
+//        System.out.println(bestMatchesConcurrentSymbol.size());
+//        bestMatchesConcurrentSymbol = bestMatchesConcurrentSymbol.stream().sorted(Comparator.comparing(s -> s.getKey().get(0))).toList();
+//        for (var bestMatch : bestMatchesConcurrentSymbol) {
 //            System.out.println(bestMatch);
 //        }
+
         System.out.println("MATCHES#################################################");
 //        List<Pair<String, String>> bestMatchesSingular = SequenceComparator.findBestMatches(latinTokens, italianoTokens);
 //        bestMatchesSingular = bestMatchesSingular.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
@@ -127,29 +137,29 @@ public class Main {
 //            System.out.println(ANSI_RED
 //                    + "UNEQUAL"
 //                    + ANSI_RESET);
-//        }
+//        }// TODO: Test symbol workers with needleman
         System.out.println("NEEDLEMAN-WUNSCH###############################");
 //        //needleman-wunsch
-        List<Pair<String, String>> optimalAlignmentsConcurrent = wo1.executeNeedlemanWunschWorkers();
+//        List<Pair<String, String>> optimalAlignmentsConcurrent = woRepresentatives.executeNeedlemanWunschWorkers();
 //        List<Pair<String, String>> optimalAlignmentsSingular = new ArrayList<>();
 //        for (Pair<String, String> bestMatch : bestMatchesSingular) {
 //            Pair<String, String> optimalAlignment = NeedlemanWunschAlgorithm.computeOptimalAlignment(bestMatch.getKey(), bestMatch.getValue());
 //            optimalAlignmentsSingular.add(optimalAlignment);
 //        }
-
+//
 //        optimalAlignmentsConcurrent = optimalAlignmentsConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
 //        for (Pair<String, String> optimalAlignment : optimalAlignmentsConcurrent) {
 //            System.out.println(optimalAlignment);
 //        }
-        System.out.println(optimalAlignmentsConcurrent.size());
+//        System.out.println(optimalAlignmentsConcurrent.size());
 //        optimalAlignmentsSingular = optimalAlignmentsSingular.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
-        System.out.println("ALIGNMENTS########################################");
+//        System.out.println("ALIGNMENTS########################################");
 //        for (Pair<String, String> optimalAlignment : optimalAlignmentsSingular) {
 //            System.out.println(optimalAlignment);
 //        }
-
-
-
+//
+//
+//
 //        if (optimalAlignmentsSingular.equals(optimalAlignmentsConcurrent)) {
 //            System.out.println(ANSI_GREEN
 //                    + "EQUAL"
