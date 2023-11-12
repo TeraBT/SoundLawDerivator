@@ -20,7 +20,7 @@ public abstract class WorkerOrganizer<T> {
     public List<Pair<T, T>> executeLevenshteinWorkers() throws InterruptedException {
         List<Thread> levenshteinWorkerList = new ArrayList<>();
         for (int i = 0; i < levenshteinWorkerNumber; i++) {
-            WorkerOrganizer<T>.LevenshteinWorker levenshteinWorker = new WorkerOrganizer<T>.LevenshteinWorker();
+            LevenshteinWorker levenshteinWorker = new LevenshteinWorker();
             levenshteinWorker.start();
             levenshteinWorkerList.add(levenshteinWorker);
         }
@@ -34,7 +34,7 @@ public abstract class WorkerOrganizer<T> {
     public List<Pair<T, T>> executeNeedlemanWunschWorkers() throws InterruptedException {
         List<Thread> needlemanWunschWorkerList = new ArrayList<>();
         for (int i = 0; i < needlemanWunschWorkerNumber; i++) {
-            WorkerOrganizer<T>.NeedlemanWunschWorker needlemanWunschWorker = new WorkerOrganizer<T>.NeedlemanWunschWorker();
+            NeedlemanWunschWorker needlemanWunschWorker = new NeedlemanWunschWorker();
             needlemanWunschWorker.start();
             needlemanWunschWorkerList.add(needlemanWunschWorker);
         }
