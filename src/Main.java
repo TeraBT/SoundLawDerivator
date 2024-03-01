@@ -142,7 +142,7 @@ public class Main {
 //            System.out.println(ANSI_RED
 //                    + "UNEQUAL"
 //                    + ANSI_RESET);
-//        }// TODO: Test symbol workers with needleman
+//        }
 //        System.out.println("NEEDLEMAN-WUNSCH###############################");
 //        //needleman-wunsch
 //        List<Pair<String, String>> optimalAlignmentsConcurrent = woRepresentatives.executeNeedlemanWunschWorkers();
