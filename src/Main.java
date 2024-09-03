@@ -109,16 +109,16 @@ public class Main {
 //        List<String> italianoSmall = italianoTokens.subList(0, 100);
         RepresentativeWorkerOrganizer woRepresentatives = new RepresentativeWorkerOrganizer(latinTokens, italianoTokens, 16, 16);
         SymbolWorkerOrganizer woSymbols = new SymbolWorkerOrganizer(latinSymbolTokens, italianoSymbolTokens, 16, 16);
-//        List<Pair<String, String>> bestMatchesConcurrent = woRepresentatives.executeLevenshteinWorkers();
-//        System.out.println(bestMatchesConcurrent.size());
-//        bestMatchesConcurrent = bestMatchesConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
-//        for (Pair<String, String> bestMatch : bestMatchesConcurrent) {
-//            System.out.println(bestMatch);
-//        }
+        List<Pair<String, String>> bestMatchesConcurrent = woRepresentatives.executeLevenshteinWorkers();
+        System.out.println(bestMatchesConcurrent.size());
+        bestMatchesConcurrent = bestMatchesConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
+        for (Pair<String, String> bestMatch : bestMatchesConcurrent) {
+            System.out.println(bestMatch);
+        }
 
         List<Pair<List<IPASymbol>, List<IPASymbol>>> bestMatchesConcurrentSymbol = woSymbols.executeLevenshteinWorkers();
         System.out.println(bestMatchesConcurrentSymbol.size());
-        bestMatchesConcurrentSymbol = bestMatchesConcurrentSymbol.stream().sorted(Comparator.comparing(s -> s.getKey().get(0))).toList();
+        bestMatchesConcurrentSymbol = bestMatchesConcurrentSymbol.stream().sorted(Comparator.comparing(s -> s.getKey().getFirst())).toList();
         int i = 0;
         for (var bestMatch : bestMatchesConcurrentSymbol) {
             if (i == 10) {
@@ -145,17 +145,17 @@ public class Main {
 //        }
 //        System.out.println("NEEDLEMAN-WUNSCH###############################");
 //        //needleman-wunsch
-//        List<Pair<String, String>> optimalAlignmentsConcurrent = woRepresentatives.executeNeedlemanWunschWorkers();
+        List<Pair<String, String>> optimalAlignmentsConcurrent = woRepresentatives.executeNeedlemanWunschWorkers();
 //        List<Pair<String, String>> optimalAlignmentsSingular = new ArrayList<>();
 //        for (Pair<String, String> bestMatch : bestMatchesSingular) {
 //            Pair<String, String> optimalAlignment = NeedlemanWunschAlgorithm.computeOptimalAlignment(bestMatch.getKey(), bestMatch.getValue());
 //            optimalAlignmentsSingular.add(optimalAlignment);
 //        }
-//
-//        optimalAlignmentsConcurrent = optimalAlignmentsConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
-//        for (Pair<String, String> optimalAlignment : optimalAlignmentsConcurrent) {
-//            System.out.println(optimalAlignment);
-//        }
+
+        optimalAlignmentsConcurrent = optimalAlignmentsConcurrent.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
+        for (Pair<String, String> optimalAlignment : optimalAlignmentsConcurrent) {
+            System.out.println(optimalAlignment);
+        }
 //        System.out.println(optimalAlignmentsConcurrent.size());
 //        optimalAlignmentsSingular = optimalAlignmentsSingular.stream().sorted(Comparator.comparing(Pair::getKey)).toList();
 //        System.out.println("ALIGNMENTS########################################");
@@ -165,7 +165,7 @@ public class Main {
 
         List<Pair<List<IPASymbol>, List<IPASymbol>>> optimalAlignmentsConcurrentSymbol = woSymbols.executeNeedlemanWunschWorkers();
         i = 0;
-        optimalAlignmentsConcurrentSymbol = optimalAlignmentsConcurrentSymbol.stream().sorted(Comparator.comparing(s -> s.getKey().get(0))).toList();
+        optimalAlignmentsConcurrentSymbol = optimalAlignmentsConcurrentSymbol.stream().sorted(Comparator.comparing(s -> s.getKey().getFirst())).toList();
         for (Pair<List<IPASymbol>, List<IPASymbol>> optimalAlignment : optimalAlignmentsConcurrentSymbol) {
             if (i == 10) {
                 break;
@@ -178,15 +178,15 @@ public class Main {
 
 
 
-//        if (bestMatchesConcurrentSymbol.equals(optimalAlignmentsConcurrentSymbol)) {
-//            System.out.println(ANSI_GREEN
-//                    + "EQUAL"
-//                    + ANSI_RESET);
-//        } else {
-//            System.out.println(ANSI_RED
-//                    + "UNEQUAL"
-//                    + ANSI_RESET);
-//        }
+        if (bestMatchesConcurrentSymbol.equals(optimalAlignmentsConcurrentSymbol)) {
+            System.out.println(ANSI_GREEN
+                    + "EQUAL"
+                    + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_RED
+                    + "UNEQUAL"
+                    + ANSI_RESET);
+        }
 
 
 

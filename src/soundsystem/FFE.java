@@ -8,7 +8,7 @@ import org.apache.commons.numbers.fraction.Fraction;
 
 
 /**
- * SoundSystem.FFE stands for FractionFieldElement
+ * FFE stands for FractionFieldElement
  */
 public class
 FFE implements FieldElement<FFE> {

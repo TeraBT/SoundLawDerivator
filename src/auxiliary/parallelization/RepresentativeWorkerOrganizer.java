@@ -27,4 +27,3 @@ public class RepresentativeWorkerOrganizer extends WorkerOrganizer<String> {
         return NeedlemanWunschAlgorithm.computeOptimalAlignment(sequence1, sequence2);
     }
 }
-
