@@ -5,11 +5,13 @@ import mapping.IPA;
 import mapping.IPASymbol;
 import mapping.LatinOrthography;
 import mapping.SigmaMapper;
+import naive.NaiveDerivationAlgorithm;
 import org.apache.commons.math4.legacy.core.Pair;
 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 
 public class Main {
@@ -178,17 +180,21 @@ public class Main {
 
 
 
-        if (bestMatchesConcurrentSymbol.equals(optimalAlignmentsConcurrentSymbol)) {
-            System.out.println(ANSI_GREEN
-                    + "EQUAL"
-                    + ANSI_RESET);
-        } else {
-            System.out.println(ANSI_RED
-                    + "UNEQUAL"
-                    + ANSI_RESET);
+//        if (bestMatchesConcurrentSymbol.equals(optimalAlignmentsConcurrentSymbol)) {
+//            System.out.println(ANSI_GREEN
+//                    + "EQUAL"
+//                    + ANSI_RESET);
+//        } else {
+//            System.out.println(ANSI_RED
+//                    + "UNEQUAL"
+//                    + ANSI_RESET);
+//        }
+
+        List<List<List<Character>>> soundLawCandidates = NaiveDerivationAlgorithm.deriveSoundLawCandidatesAsCharacters(optimalAlignmentsConcurrent);
+        List<Map.Entry<List<Character>, Long>> soundLaws = NaiveDerivationAlgorithm.deriveSoundLawsAsCharacters(soundLawCandidates);
+
+        for (i = 0; i < soundLaws.size(); i++) {
+            System.out.println(soundLaws.get(i));
         }
-
-
-
     }
 }
