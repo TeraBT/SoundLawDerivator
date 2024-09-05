@@ -190,11 +190,28 @@ public class Main {
 //                    + ANSI_RESET);
 //        }
 
-        List<List<List<Character>>> soundLawCandidates = NaiveDerivationAlgorithm.deriveSoundLawCandidatesAsCharacters(optimalAlignmentsConcurrent);
-        List<Map.Entry<List<Character>, Long>> soundLaws = NaiveDerivationAlgorithm.deriveSoundLawsAsCharacters(soundLawCandidates);
+        List<List<List<Character>>> soundLawCandidatesAsCharacters = NaiveDerivationAlgorithm.deriveSoundLawCandidatesAsCharacters(optimalAlignmentsConcurrent);
+        List<Map.Entry<List<Character>, Long>> soundLawsAsCharacters = NaiveDerivationAlgorithm.deriveSoundLawsAsCharacters(soundLawCandidatesAsCharacters);
 
-        for (i = 0; i < soundLaws.size(); i++) {
-            System.out.println(soundLaws.get(i));
+        for (i = 0; i < soundLawsAsCharacters.size(); i++) {
+            System.out.println(soundLawsAsCharacters.get(i));
+        }
+
+        List<List<List<IPASymbol>>> soundLawCandidatesAsSymbols = NaiveDerivationAlgorithm.deriveSoundLawCandidatesAsIPASymbols(optimalAlignmentsConcurrentSymbol);
+        List<Map.Entry<List<IPASymbol>, Long>> soundLawsAsSymbols = NaiveDerivationAlgorithm.deriveSoundLawsAsIPASymbols(soundLawCandidatesAsSymbols);
+
+        for (i = 0; i < soundLawsAsSymbols.size(); i++) {
+            System.out.println(soundLawsAsSymbols.get(i));
+        }
+
+        System.out.println("SOUND LAWS DONE ########################################\nSHOWING TOP 20 NOW");
+
+        for (i = 0; i < soundLawsAsCharacters.size() && i < 20; i++) {
+            System.out.println(soundLawsAsCharacters.get(i));
+        }
+
+        for (i = 0; i < soundLawsAsCharacters.size() && i < 20; i++) {
+            System.out.println(soundLawsAsSymbols.get(i));
         }
     }
 }
