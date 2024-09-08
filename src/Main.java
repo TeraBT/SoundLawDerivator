@@ -7,6 +7,7 @@ import mapping.LatinOrthography;
 import mapping.SigmaMapper;
 import naive.NaiveDerivationAlgorithm;
 import org.apache.commons.math4.legacy.core.Pair;
+import soundsystem.Phone;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -179,7 +180,6 @@ public class Main {
         System.out.println("ALIGNMENTS DONE ########################################");
 
 
-
 //        if (bestMatchesConcurrentSymbol.equals(optimalAlignmentsConcurrentSymbol)) {
 //            System.out.println(ANSI_GREEN
 //                    + "EQUAL"
@@ -204,6 +204,11 @@ public class Main {
             System.out.println(soundLawsAsSymbols.get(i));
         }
 
+        for (Map.Entry<List<IPASymbol>, Long> soundLaw : soundLawsAsSymbols) {
+            Map.Entry<List<Phone>, Long> soundLawAsPhones = Map.entry(soundLaw.getKey().stream().map(ipa::mapToPhone).toList(), soundLaw.getValue());
+            System.out.println(soundLawAsPhones);
+        }
+
         System.out.println("SOUND LAWS DONE ########################################\nSHOWING TOP 20 NOW");
 
         for (i = 0; i < soundLawsAsCharacters.size() && i < 20; i++) {
@@ -212,6 +217,12 @@ public class Main {
 
         for (i = 0; i < soundLawsAsCharacters.size() && i < 20; i++) {
             System.out.println(soundLawsAsSymbols.get(i));
+        }
+
+        for (i = 0; i < soundLawsAsSymbols.size() && i < 20; i++) {
+            Map.Entry<List<IPASymbol>, Long> soundLaw = soundLawsAsSymbols.get(i);
+                Map.Entry<List<Phone>, Long> soundLawAsPhones = Map.entry(soundLaw.getKey().stream().map(ipa::mapToPhone).toList(), soundLaw.getValue());
+                System.out.println(soundLawAsPhones);
         }
     }
 }

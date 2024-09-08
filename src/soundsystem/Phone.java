@@ -31,7 +31,7 @@ public class Phone {
         FFE primaryAxis = phoneVector.getEntry(0);
         FFE secondaryAxis = phoneVector.getEntry(1);
         FFE tertiaryAxis = phoneVector.getEntry(2);
-        return primaryAxis.signum() != -1 && secondaryAxis.signum() != -1 && tertiaryAxis.signum() != 1;
+        return primaryAxis.signum() != -1 && secondaryAxis.signum() != -1 && tertiaryAxis.signum() != -1;
     }
 
     public boolean isVowel() {

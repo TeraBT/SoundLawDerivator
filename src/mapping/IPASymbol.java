@@ -1,10 +1,10 @@
 package mapping;
 
 public enum IPASymbol {
-    // special symbols
+    // special symbols:
     EMPTY_SYMBOL, UNKNOWN_SYMBOL, UNDEFINED_SYMBOL,
 
-    // standard vowels
+    // standard vowels:
     A, E, I, O, U,
 
     // -------consonants---------:
