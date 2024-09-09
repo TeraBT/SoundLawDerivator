@@ -55,12 +55,20 @@ public class Phone {
         return phoneVector.toArray();
     }
 
+//    @Override
+//    public String toString() {
+//        FFE primaryAxis = phoneVector.getEntry(0);
+//        FFE secondaryAxis = phoneVector.getEntry(1);
+//        FFE tertiaryAxis = phoneVector.getEntry(2);
+//        return "P(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
+//    }
+
     @Override
     public String toString() {
         FFE primaryAxis = phoneVector.getEntry(0);
         FFE secondaryAxis = phoneVector.getEntry(1);
         FFE tertiaryAxis = phoneVector.getEntry(2);
-        return "P(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
+        return "(%s, %s, %s)".formatted(primaryAxis, secondaryAxis, tertiaryAxis);
     }
 
     @Override

@@ -21,6 +21,7 @@ FFE implements FieldElement<FFE> {
     public static FFE of(FFE ffe) {
         return new FFE(ffe.getFraction());
     }
+
     private FFE(Fraction fraction) {
         this.fraction = Fraction.of(fraction.getNumerator(), fraction.getDenominator());
     }
@@ -73,9 +74,14 @@ FFE implements FieldElement<FFE> {
         return Fraction.of(fraction.getNumerator(), fraction.getDenominator());
     }
 
+//    @Override
+//    public String toString() {
+//        return fraction.toString();
+//    }
+
     @Override
     public String toString() {
-        return fraction.toString();
+        return String.valueOf((double) fraction.getNumerator() / fraction.getDenominator());
     }
 
     @Override
