@@ -2,6 +2,7 @@ package auxiliary;
 
 import mapping.IPASymbol;
 import org.apache.commons.math4.legacy.core.Pair;
+import soundsystem.Phone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,15 @@ public class SequenceComparator {
         return bestMatchList;
     }
 
+    public static List<Pair<List<Phone>, List<Phone>>> findBestMatchesInPhoneSequence(List<List<Phone>> tokenListOlder, List<List<Phone>> tokenListYounger) {
+        List<Pair<List<Phone>, List<Phone>>> bestMatchList = new ArrayList<>();
+        for (List<Phone> tokenOlder : tokenListOlder) {
+            List<Phone> bestCounterpart = compareOneToNForPhones(tokenOlder, tokenListYounger);
+            bestMatchList.add(new Pair<>(tokenOlder, bestCounterpart));
+        }
+        return bestMatchList;
+    }
+
     public static Pair<String, String> findBestMatchConcurrently(String tokenOlder, List<String> tokenListYounger) {
         String bestCounterpart = compareOneToN(tokenOlder, tokenListYounger);
         return new Pair<>(tokenOlder, bestCounterpart);
@@ -35,6 +45,11 @@ public class SequenceComparator {
 
     public static Pair<List<IPASymbol>, List<IPASymbol>> findBestMatchConcurrently(List<IPASymbol> tokenOlder, List<List<IPASymbol>> tokenListYounger) {
         List<IPASymbol> bestCounterpart = compareOneToN(tokenOlder, tokenListYounger);
+        return new Pair<>(tokenOlder, bestCounterpart);
+    }
+
+    public static Pair<List<Phone>, List<Phone>> findBestMatchForPhonesConcurrently(List<Phone> tokenOlder, List<List<Phone>> tokenListYounger) {
+        List<Phone> bestCounterpart = compareOneToNForPhones(tokenOlder, tokenListYounger);
         return new Pair<>(tokenOlder, bestCounterpart);
     }
 
@@ -70,7 +85,19 @@ public class SequenceComparator {
         return bestCounterpart;
     }
 
+    private static List<Phone> compareOneToNForPhones(List<Phone> tokenOlder, List<List<Phone>> tokenListYounger) {
+        List<Phone> bestCounterpart = null;
+        double matchDistance;
+        double priorMatchDistance = 0;
 
+        for (List<Phone> currentTokenYounger : tokenListYounger) {
 
-    //TODO: same method but for IPASymbols!
+            matchDistance = LevenshteinDistance.calculateSimilarityScoreOfPhones(tokenOlder, currentTokenYounger);
+            if (matchDistance > priorMatchDistance) {
+                priorMatchDistance = matchDistance;
+                bestCounterpart = currentTokenYounger;
+            }
+        }
+        return bestCounterpart;
+    }
 }

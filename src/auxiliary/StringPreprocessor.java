@@ -2,6 +2,7 @@ package auxiliary;
 
 import mapping.IPASymbol;
 import mapping.SigmaMapper;
+import soundsystem.Phone;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,10 +53,29 @@ public class StringPreprocessor {
 //        return symbolSequenceList;
     }
 
+    public static List<List<Phone>> tokenizeDistinctToPhoneSequence(String text, SigmaMapper sigmaMapper, int stringWorkerNumber) throws InterruptedException {
+        BlockingQueue<String> tokenQueue = new LinkedBlockingQueue<>(tokenizeDistinct(text));
+        List<List<Phone>> phoneSequenceList = Collections.synchronizedList(new ArrayList<>());
+        List<Thread> stringWorkerList = new ArrayList<>();
+
+        for (int i = 0; i < stringWorkerNumber; i++) {
+            StringWorkerForPhones stringWorker = new StringWorkerForPhones(tokenQueue, phoneSequenceList, sigmaMapper);
+            stringWorker.start();
+            stringWorkerList.add(stringWorker);
+        }
+
+        for (Thread thread : stringWorkerList) {
+            thread.join();
+        }
+
+        return List.copyOf(phoneSequenceList);
+    }
+
     private static class StringWorker extends Thread {
 
         private final BlockingQueue<String> tokenQueue;
         private final List<List<IPASymbol>> synchronizedSymbolSequenceList;
+
         private final SigmaMapper sigmaMapper;
 
         private StringWorker(BlockingQueue<String> tokenQueue, List<List<IPASymbol>> synchronizedSymbolSequenceList, SigmaMapper sigmaMapper) {
@@ -73,6 +93,33 @@ public class StringPreprocessor {
                 } else {
                     List<IPASymbol> symbolSequence = sigmaMapper.mapToFlatSymbolSequence(token);
                     synchronizedSymbolSequenceList.add(symbolSequence);
+                }
+            }
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private static class StringWorkerForPhones extends Thread {
+
+        private final BlockingQueue<String> tokenQueue;
+        private final List<List<Phone>> synchronizedPhoneSequenceList;
+        private final SigmaMapper sigmaMapper;
+
+        private StringWorkerForPhones(BlockingQueue<String> tokenQueue, List<List<Phone>> synchronizedPhoneSequenceList, SigmaMapper sigmaMapper) {
+            this.tokenQueue = tokenQueue;
+            this.synchronizedPhoneSequenceList = synchronizedPhoneSequenceList;
+            this.sigmaMapper = sigmaMapper;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                String token = tokenQueue.poll();
+                if (token == null) {
+                    break;
+                } else {
+                    List<Phone> phoneSequence = sigmaMapper.mapDirectlyToPhoneSequence(token);
+                    synchronizedPhoneSequenceList.add(phoneSequence);
                 }
             }
             Thread.currentThread().interrupt();

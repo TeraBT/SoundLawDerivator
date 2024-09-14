@@ -1,12 +1,57 @@
     package naive;
 
+    import mapping.IPA;
     import mapping.IPASymbol;
     import org.apache.commons.math4.legacy.core.Pair;
+    import soundsystem.Phone;
 
     import java.util.*;
     import java.util.stream.Collectors;
 
     public class NaiveDerivationAlgorithm {
+
+        public static List<List<List<Phone>>> deriveSoundLawCandidatesAsPhones(List<Pair<List<Phone>, List<Phone>>> optimalAlignmentList) {
+
+            List<List<List<Phone>>> soundLawList = new ArrayList<>();
+            for (Pair<List<Phone>, List<Phone>> match : optimalAlignmentList) {
+                List<Phone> first = match.getFirst();
+                List<Phone> second = match.getSecond();
+                List<List<Phone>> soundLawListOfMatch = new ArrayList<>();
+
+                for (int i = 0; i < first.size(); i++) {
+                    List<Phone> soundLaw = new ArrayList<>();
+                    if (first.get(i) != second.get(i)) {
+                        soundLaw.add(first.get(i));
+                        soundLaw.add(second.get(i));
+
+                        if (first.size() == 1) {
+                            soundLaw.add(IPA.EMPTY_PHONE);
+                            soundLaw.add(IPA.EMPTY_PHONE);
+                        }
+
+                        if (i == 0) {
+                            soundLaw.add(IPA.EMPTY_PHONE);
+                            soundLaw.add(first.get(i + 1));
+                        }
+
+                        if (i == first.size() - 1) {
+                            soundLaw.add(first.get(i - 1));
+                            soundLaw.add(IPA.EMPTY_PHONE);
+                        }
+
+                        if (i != 0 && i != first.size() - 1) {
+                            soundLaw.add(first.get(i - 1));
+                            soundLaw.add(first.get(i + 1));
+                        }
+
+                        soundLawListOfMatch.add(soundLaw);
+                    }
+                }
+                soundLawList.add(soundLawListOfMatch);
+            }
+
+            return soundLawList;
+        }
 
         public static List<List<List<IPASymbol>>> deriveSoundLawCandidatesAsIPASymbols(List<Pair<List<IPASymbol>, List<IPASymbol>>> optimalAlignmentList) {
 
@@ -92,6 +137,19 @@
             }
 
             return soundLawList;
+        }
+
+        public static List<Map.Entry<List<Phone>, Long>> deriveSoundLawsAsPhones(List<List<List<Phone>>> soundLawListList) {
+            List<List<Phone>> soundLawList = soundLawListList.stream().flatMap(List::stream).collect(Collectors.toCollection(ArrayList::new));
+            List<List<Phone>> distinctSoundLawList = soundLawList.stream().distinct().collect(Collectors.toCollection(ArrayList::new));
+
+            Map<List<Phone>, Long> soundLawFrequencyMap = new HashMap<>();
+            for (List<Phone> soundLaw : distinctSoundLawList) {
+                long count = soundLawList.stream().filter(sl -> sl.equals(soundLaw)).count();
+                soundLawFrequencyMap.put(soundLaw, count);
+            }
+
+            return soundLawFrequencyMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).toList();
         }
 
         public static List<Map.Entry<List<IPASymbol>, Long>> deriveSoundLawsAsIPASymbols(List<List<List<IPASymbol>>> soundLawListList) {

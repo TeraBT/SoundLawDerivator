@@ -1,6 +1,7 @@
 package auxiliary;
 
 import mapping.IPASymbol;
+import soundsystem.Phone;
 
 import java.util.List;
 
@@ -71,12 +72,49 @@ public class LevenshteinDistance {
         return levenshteinMatrix[n][m];
     }
 
+    public static int calculateDistanceOfPhones(List<Phone> sequence1, List<Phone> sequence2) {
+        int n = sequence1.size();
+        int m = sequence2.size();
+        if (n == 0) {
+            return m;
+        }
+        if (m == 0) {
+            return n;
+        }
+        int[][] levenshteinMatrix = new int[n+1][m+1];
+
+        for (int i = 1; i <= n; i++) {
+            levenshteinMatrix[i][0] = i;
+        }
+        for (int j = 1; j <= m; j++) {
+            levenshteinMatrix[0][j] = j;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                int substitutionCost;
+                if (comparePhonesAt(sequence1, sequence2, i-1, j-1)) {
+                    substitutionCost = 0;
+                } else {
+                    substitutionCost = 1;
+                }
+                calculateMatrixEntries(levenshteinMatrix, i, j, substitutionCost);
+            }
+        }
+
+        return levenshteinMatrix[n][m];
+    }
+
     private static boolean compareSymbolsAt(String sequence1, String sequence2, int index1, int index2) {
         return sequence1.charAt(index1) == sequence2.charAt(index2);
     }
 
     private static boolean compareSymbolsAt(List<IPASymbol> sequence1, List<IPASymbol> sequence2, int index1, int index2) {
         return sequence1.get(index1) == sequence2.get(index2);
+    }
+
+    private static boolean comparePhonesAt(List<Phone> sequence1, List<Phone> sequence2, int index1, int index2) {
+        return sequence1.get(index1).equals(sequence2.get(index2));
     }
 
     private static void calculateMatrixEntries(int[][] levenshteinMatrix, int i, int j, int substitutionCost) {
@@ -95,6 +133,12 @@ public class LevenshteinDistance {
     public static double calculateSimilarityScore(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
         int n = Math.max(sequence1.size(), sequence2.size());
         int d = calculateDistance(sequence1, sequence2);
+        return (double) (n-d)/n;
+    }
+
+    public static double calculateSimilarityScoreOfPhones(List<Phone> sequence1, List<Phone> sequence2) {
+        int n = Math.max(sequence1.size(), sequence2.size());
+        int d = calculateDistanceOfPhones(sequence1, sequence2);
         return (double) (n-d)/n;
     }
 }

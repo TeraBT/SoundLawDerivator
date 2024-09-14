@@ -1,7 +1,9 @@
 package auxiliary;
 
+import mapping.IPA;
 import mapping.IPASymbol;
 import org.apache.commons.math4.legacy.core.Pair;
+import soundsystem.Phone;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,10 @@ public class NeedlemanWunschAlgorithm {
     }
 
     private static int getSimilarityScore(IPASymbol i, IPASymbol j) {
+        return i.equals(j) ? 1 : -1;
+    }
+
+    private static int getSimilarityScore(Phone i, Phone j) {
         return i.equals(j) ? 1 : -1;
     }
 
@@ -37,6 +43,24 @@ public class NeedlemanWunschAlgorithm {
     }
 
     private static int[][] computeAlignmentMatrix(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
+        int n = sequence1.size();
+        int m = sequence2.size();
+        int[][] alignmentMatrix = initializeMatrix(n, m);
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                int matching = alignmentMatrix[i - 1][j - 1] + getSimilarityScore(
+                        sequence1.get(i - 1), sequence2.get(j - 1));
+                int deletion = alignmentMatrix[i - 1][j] + gapPenalty;
+                int insertion = alignmentMatrix[i][j - 1] + 1;
+                alignmentMatrix[i][j] = Math.max(Math.max(matching, deletion), insertion);
+            }
+        }
+
+        return alignmentMatrix;
+    }
+
+    private static int[][] computeAlignmentMatrixOfPhones(List<Phone> sequence1, List<Phone> sequence2) {
         int n = sequence1.size();
         int m = sequence2.size();
         int[][] alignmentMatrix = initializeMatrix(n, m);
@@ -102,17 +126,44 @@ public class NeedlemanWunschAlgorithm {
         while (i > 0 || j > 0) {
             if (i > 0 && j > 0 && alignmentMatrix[i][j] == alignmentMatrix[i - 1][j - 1]
                     + getSimilarityScore(sequence1.get(i - 1), sequence2.get(j - 1))) {
-                alignmentSequence1.add(0, sequence1.get(i-1));
-                alignmentSequence2.add(0, sequence2.get(j-1));
+                alignmentSequence1.addFirst(sequence1.get(i-1));
+                alignmentSequence2.addFirst(sequence2.get(j-1));
                 i--;
                 j--;
             } else if (i > 0 && alignmentMatrix[i][j] == alignmentMatrix[i-1][j] + gapPenalty) {
-                alignmentSequence1.add(0, sequence1.get(i-1));
-                alignmentSequence2.add(0, IPASymbol.EMPTY_SYMBOL);
+                alignmentSequence1.addFirst(sequence1.get(i-1));
+                alignmentSequence2.addFirst(IPASymbol.EMPTY_SYMBOL);
                 i--;
             } else {
-                alignmentSequence1.add(0, IPASymbol.EMPTY_SYMBOL);
-                alignmentSequence2.add(0, sequence2.get(j-1));
+                alignmentSequence1.addFirst(IPASymbol.EMPTY_SYMBOL);
+                alignmentSequence2.addFirst(sequence2.get(j-1));
+                j--;
+            }
+        }
+
+        return Pair.create(alignmentSequence1, alignmentSequence2);
+    }
+
+    private static Pair<List<Phone>, List<Phone>> computeOptimalAlignmentOfPhones(int[][] alignmentMatrix, List<Phone> sequence1, List<Phone> sequence2) {
+        List<Phone> alignmentSequence1 = new ArrayList<>();
+        List<Phone> alignmentSequence2 = new ArrayList<>();
+        int i = sequence1.size();
+        int j = sequence2.size();
+
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0 && alignmentMatrix[i][j] == alignmentMatrix[i - 1][j - 1]
+                    + getSimilarityScore(sequence1.get(i - 1), sequence2.get(j - 1))) {
+                alignmentSequence1.addFirst(sequence1.get(i-1));
+                alignmentSequence2.addFirst(sequence2.get(j-1));
+                i--;
+                j--;
+            } else if (i > 0 && alignmentMatrix[i][j] == alignmentMatrix[i-1][j] + gapPenalty) {
+                alignmentSequence1.addFirst(sequence1.get(i-1));
+                alignmentSequence2.addFirst(IPA.EMPTY_PHONE);
+                i--;
+            } else {
+                alignmentSequence1.addFirst(IPA.EMPTY_PHONE);
+                alignmentSequence2.addFirst(sequence2.get(j-1));
                 j--;
             }
         }
@@ -126,5 +177,9 @@ public class NeedlemanWunschAlgorithm {
 
     public static Pair<List<IPASymbol>, List<IPASymbol>> computeOptimalAlignment(List<IPASymbol> sequence1, List<IPASymbol> sequence2) {
         return computeOptimalAlignment(computeAlignmentMatrix(sequence1, sequence2), sequence1, sequence2);
+    }
+
+    public static Pair<List<Phone>, List<Phone>> computeOptimalAlignmentOfPhones(List<Phone> sequence1, List<Phone> sequence2) {
+        return computeOptimalAlignmentOfPhones(computeAlignmentMatrixOfPhones(sequence1, sequence2), sequence1, sequence2);
     }
 }
