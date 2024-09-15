@@ -40,6 +40,7 @@ public enum IPASymbol {
 
     // approximants:
     PALATAL_APPROXIMANT,
+    VOICED_LABIAL_VELAR_APPROXIMANT,
 
     // lateral approximants:
     ALVEOLAR_LATERAL_APPROXIMANT

@@ -1,10 +1,7 @@
 import auxiliary.StringPreprocessor;
 import auxiliary.XMLParser;
 import auxiliary.parallelization.PhoneWorkerOrganizer;
-import mapping.IPA;
-import mapping.IPASymbol;
-import mapping.LatinOrthography;
-import mapping.SigmaMapper;
+import mapping.*;
 import naive.NaiveDerivationAlgorithm;
 import org.apache.commons.math4.legacy.core.Pair;
 import soundsystem.Phone;
@@ -21,16 +18,18 @@ public class Main {
     public static final String ANSI_RED = "\u001B[31m";
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        LatinOrthography latinOrthography = new LatinOrthography();
         IPA ipa = new IPA();
-        SigmaMapper sigmaMapper = new SigmaMapper(latinOrthography, ipa);
+        LatinOrthography latinOrthography = new LatinOrthography();
+        ItalianOrthography italianOrthography = new ItalianOrthography();
+        SigmaMapper sigmaMapperLatin = new SigmaMapper(latinOrthography, ipa);
+        SigmaMapper sigmaMapperItalian = new SigmaMapper(italianOrthography, ipa);
 
         List<String> latinTokens = StringPreprocessor.tokenizeDistinct(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"));
-        List<String> italianoTokens = StringPreprocessor.tokenizeDistinct(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"));
-        List<List<Phone>> latinPhoneTokens = StringPreprocessor.tokenizeDistinctToPhoneSequence(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"), sigmaMapper, 16);
-        List<List<Phone>> italianoPhoneTokens = StringPreprocessor.tokenizeDistinctToPhoneSequence(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"), sigmaMapper, 16);
+        List<String> italianTokens = StringPreprocessor.tokenizeDistinct(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"));
+        List<List<Phone>> latinPhoneTokens = StringPreprocessor.tokenizeDistinctToPhoneSequence(XMLParser.parseOnlyText("corpora/Julius-Caesar_De-bello-Gallico.xml"), sigmaMapperLatin, 16);
+        List<List<Phone>> italianPhoneTokens = StringPreprocessor.tokenizeDistinctToPhoneSequence(XMLParser.parseOnlyText("corpora/de_bello_gallico_italiano.html"), sigmaMapperItalian, 16);
 
-        PhoneWorkerOrganizer woPhones = new PhoneWorkerOrganizer(latinPhoneTokens, italianoPhoneTokens, 16, 16);
+        PhoneWorkerOrganizer woPhones = new PhoneWorkerOrganizer(latinPhoneTokens, italianPhoneTokens, 16, 16);
 
 
         List<Pair<List<Phone>, List<Phone>>> bestMatchesConcurrentForPhones = woPhones.executeLevenshteinWorkers();

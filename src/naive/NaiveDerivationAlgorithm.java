@@ -27,19 +27,13 @@
                         if (first.size() == 1) {
                             soundLaw.add(IPA.EMPTY_PHONE);
                             soundLaw.add(IPA.EMPTY_PHONE);
-                        }
-
-                        if (i == 0) {
+                        } else if (i == 0) {
                             soundLaw.add(IPA.EMPTY_PHONE);
                             soundLaw.add(first.get(i + 1));
-                        }
-
-                        if (i == first.size() - 1) {
+                        } else if (i == first.size() - 1) {
                             soundLaw.add(first.get(i - 1));
                             soundLaw.add(IPA.EMPTY_PHONE);
-                        }
-
-                        if (i != 0 && i != first.size() - 1) {
+                        } else {
                             soundLaw.add(first.get(i - 1));
                             soundLaw.add(first.get(i + 1));
                         }

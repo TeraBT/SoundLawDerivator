@@ -41,6 +41,8 @@ public class IPA implements PhoneticAlphabet {
     public static final Phone VOICELESS_GLOTTAL_FRICATIVE = new Phone(1, 1, 5, 10, 0, 1);
 
     public static final Phone PALATAL_APPROXIMANT = new Phone(6, 10, 7, 10, 1, 1);
+    // TODO: How to model labialization/velarization?
+    public static final Phone VOICED_LABIAL_VELAR_APPROXIMANT = new Phone(0, 10, 7, 10, 1, 1);
 
     public static final Phone ALVEOLAR_LATERAL_APPROXIMANT = new Phone(3, 10, 8, 10, 1, 1);
 

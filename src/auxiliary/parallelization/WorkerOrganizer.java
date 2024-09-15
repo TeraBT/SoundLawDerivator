@@ -68,7 +68,8 @@ public abstract class WorkerOrganizer<T> {
         public void run() {
             while (true) {
                 Pair<T, T> bestMatch = bestMatchQueue.poll();
-                if (bestMatch == null) {
+                if (bestMatch == null || bestMatch.getKey() == null || bestMatch.getValue() == null) {
+                    // TODO: Investigate why getValue() sometimes null for IPA symbols, this should not happen.
                     break;
                 } else {
                     Pair<T, T> optimalAlignment = needlemanWunschAlignmentWrapperMethod(bestMatch.getKey(), bestMatch.getValue());

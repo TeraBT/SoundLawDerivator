@@ -17,25 +17,26 @@ public class LatinOrthography implements Orthography {
         representativeToSymbolMap.put("b", List.of(IPASymbol.VOICED_BILABIAL_PLOSIVE));
         representativeToSymbolMap.put("t", List.of(IPASymbol.VOICELESS_ALVEOLAR_PLOSIVE));
         representativeToSymbolMap.put("d", List.of(IPASymbol.VOICED_ALVEOLAR_PLOSIVE));
-        representativeToSymbolMap.put("k", List.of(IPASymbol.VOICELESS_VELAR_PLOSIVE));
+        representativeToSymbolMap.put("c", List.of(IPASymbol.VOICELESS_VELAR_PLOSIVE));
         representativeToSymbolMap.put("g", List.of(IPASymbol.VOICED_VELAR_PLOSIVE));
         
         representativeToSymbolMap.put("qu", List.of(IPASymbol.VOICELESS_VELAR_PLOSIVE_LABIALIZED));
         
         representativeToSymbolMap.put("m", List.of(IPASymbol.BILABIAL_NASAL));
         representativeToSymbolMap.put("n", List.of(IPASymbol.ALVEOLAR_NASAL));
-        representativeToSymbolMap.put("ng", List.of(IPASymbol.VELAR_NASAL));
+        representativeToSymbolMap.put("ng", List.of(IPASymbol.VELAR_NASAL, IPASymbol.VOICED_VELAR_PLOSIVE));
         
         representativeToSymbolMap.put("gn", List.of(IPASymbol.VELAR_NASAL, IPASymbol.ALVEOLAR_NASAL));
         
         representativeToSymbolMap.put("r", List.of(IPASymbol.ALVEOLAR_TRILL));
         
         representativeToSymbolMap.put("f", List.of(IPASymbol.VOICELESS_LABIODENTAL_FRICATIVE));
-        representativeToSymbolMap.put("v", List.of(IPASymbol.VOICED_LABIODENTAL_FRICATIVE));
+        representativeToSymbolMap.put("v", List.of(IPASymbol.VOICED_LABIAL_VELAR_APPROXIMANT));
         representativeToSymbolMap.put("s", List.of(IPASymbol.VOICELESS_ALVEOLAR_FRICATIVE));
-        representativeToSymbolMap.put("z", List.of(IPASymbol.VOICED_ALVEOLAR_FRICATIVE));
+        representativeToSymbolMap.put("z", List.of(IPASymbol.VOICED_ALVEOLAR_PLOSIVE, IPASymbol.VOICED_ALVEOLAR_FRICATIVE));
         representativeToSymbolMap.put("h", List.of(IPASymbol.VOICELESS_GLOTTAL_FRICATIVE));
-        
+
+        // TODO: Either preprocess text or add method to differentiate between vowel and consonant i
 //        representativeToSymbolMap.put("i", List.of(IPASymbol.PALATAL_APPROXIMANT));
         
         representativeToSymbolMap.put("l", List.of(IPASymbol.ALVEOLAR_LATERAL_APPROXIMANT));

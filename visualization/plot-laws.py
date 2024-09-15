@@ -2,14 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 
-with open('sound-laws.json', 'r') as f:
+with open('sound-laws-from-phones.json', 'r') as f:
     sound_laws = json.load(f)
 
 x = []
 y = []
 z = []
+# lim = len(sound_laws)
+lim = 1
 
-for sound_law in sound_laws[0:3]:
+for sound_law in sound_laws[0:lim]:
     x.append(sound_law['vector1'][0])
     y.append(sound_law['vector1'][1])
     z.append(sound_law['vector1'][2])
@@ -31,7 +33,7 @@ fig = plt.figure(figsize=(10, 10))
 ax = plt.axes(projection='3d')
 ax.grid()
 
-ax.scatter(x, y, z, c=['r', 'g', 'k', 'k']*len(sound_laws[0:3]), alpha=1)
+ax.scatter(x, y, z, c=['r', 'g', 'k', 'k']*len(sound_laws[0:lim]), alpha=1)
 for i in range(0, len(x), 4):
     ax.plot(x[i:i+2], y[i:i+2], z[i:i+2], c='r')
     ax.plot(x[i:i+3:2], y[i:i+3:2], z[i:i+3:2], c='k')
