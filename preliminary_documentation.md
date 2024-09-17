@@ -2,7 +2,7 @@
 
 ## Code Structure Overview
 
-The project [sound_law_derivator](#) is organized into several packages and directories, each contributing to different aspects of the sound law derivation process. The main components of the project are:
+This project is organized into several packages and directories, each contributing to different aspects of the sound law derivation process. The main components of the project are:
 
 - **/src/auxiliary:** This package contains classes responsible for handling various auxiliary tasks, such as sequence comparison, string preprocessing, and parallel processing. It includes algorithms like Levenshtein distance and Needleman-Wunsch, which are critical for sequence alignment.
 
